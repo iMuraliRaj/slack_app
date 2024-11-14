@@ -1,0 +1,32 @@
+
+
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
+
+slack_token = "xoxb-2519699256225-8030554598339-z9Qag5BKl2yB0vHFUTNQg7Av"
+channel_id = "C02EQ9U6XBQ"  # Channel name or ID
+# Initialize Slack client with your token
+client = WebClient(token=slack_token)
+
+# Specify the local file path
+file_path = r"C:\Users\kutty\Downloads\compressed-pdf-100M\test-100M.pdf"
+
+# Read the local HTML file
+try:
+    with open(file_path, "r") as file:
+        content = file.read()
+
+    # Upload the file to Slack
+    response = client.files_upload_v2(
+        channels=channel_id,  # Replace with your channel ID or name
+        file=file_path,
+        title="Basic HTML File",
+        initial_comment="Here is the basic HTML file.",
+    )
+
+    print("File uploaded successfully:", response)
+
+except FileNotFoundError:
+    print("The specified file was not found.")
+except SlackApiError as e:
+    print("Error uploading file to Slack:", e.response["error"])
